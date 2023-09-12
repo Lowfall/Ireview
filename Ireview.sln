@@ -3,11 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ireview.Web", "Ireview.Web\Ireview.Web.csproj", "{7788DF4F-29E0-419E-AC80-A80080ED0847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ireview.Web", "Ireview.Web\Ireview.Web.csproj", "{7788DF4F-29E0-419E-AC80-A80080ED0847}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ireview.Core", "Ireview.Core\Ireview.Core.csproj", "{D54F60E8-C223-458C-9212-8CA7CDC6F413}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ireview.Core", "Ireview.Core\Ireview.Core.csproj", "{D54F60E8-C223-458C-9212-8CA7CDC6F413}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ireview.Infrastructure", "Ireview.Infrastructure\Ireview.Infrastructure.csproj", "{90DEC49A-312E-4B4E-AED9-224E79645D7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ireview.Infrastructure", "Ireview.Infrastructure\Ireview.Infrastructure.csproj", "{90DEC49A-312E-4B4E-AED9-224E79645D7A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D54F60E8-C223-458C-9212-8CA7CDC6F413} = {D54F60E8-C223-458C-9212-8CA7CDC6F413}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,11 @@
 using Ireview.Infrastructure.Contexts;
 using Microsoft.AspNetCore.Identity;
+using Ireview.Infrastructure.Identity.Models;
+using Ireview.Web.Mapping;
 using Microsoft.EntityFrameworkCore;
+using Ireview.Core.Mapping;
+using AutoMapper;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString,new MySqlServerVersion(new Version(8,0,33))));
+builder.Services.AddAutoMapper(configuration =>
+{
+    configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+    configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(IMapTo<>))!));
+});
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddRazorPages();
 var app = builder.Build();

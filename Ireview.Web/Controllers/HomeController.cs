@@ -1,4 +1,7 @@
-﻿using Ireview.Web.Models;
+﻿using Ireview.Infrastructure.Identity.Models;
+using Ireview.Web.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
