@@ -3,6 +3,7 @@ using System;
 using Ireview.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,29 +11,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ireview.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230913174322_Edit DbContext")]
+    partial class EditDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("ArticleTag", b =>
-                {
-                    b.Property<int>("ArticlesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ArticlesId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ArticleTag", (string)null);
-                });
 
             modelBuilder.Entity("Ireview.Core.Model.Article", b =>
                 {
@@ -54,10 +42,13 @@ namespace Ireview.Infrastructure.Migrations
                     b.Property<string>("ImageSource")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("Rating")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Stars")
+                    b.Property<int>("Stars")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -68,14 +59,17 @@ namespace Ireview.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserProfileProfileId")
+                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("TagId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.HasIndex("UserProfileProfileId");
+
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Ireview.Core.Model.Tag", b =>
@@ -84,26 +78,19 @@ namespace Ireview.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Href")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("Ireview.Core.Model.User", b =>
+            modelBuilder.Entity("Ireview.Core.Model.UserProfile", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ProfileId")
                         .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("longtext");
@@ -117,13 +104,9 @@ namespace Ireview.Infrastructure.Migrations
                     b.Property<string>("SecondName")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.HasKey("ProfileId");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("UsersProfiles", (string)null);
+                    b.ToTable("UserProfile");
                 });
 
             modelBuilder.Entity("Ireview.Infrastructure.Identity.Models.AppUser", b =>
@@ -174,12 +157,13 @@ namespace Ireview.Infrastructure.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
+
+                    b.Property<string>("UserProfileId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
@@ -190,7 +174,7 @@ namespace Ireview.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserProfileId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -327,37 +311,34 @@ namespace Ireview.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ArticleTag", b =>
+            modelBuilder.Entity("Ireview.Core.Model.Article", b =>
                 {
-                    b.HasOne("Ireview.Core.Model.Article", null)
-                        .WithMany()
-                        .HasForeignKey("ArticlesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ireview.Core.Model.Tag", null)
-                        .WithMany()
+                    b.HasOne("Ireview.Core.Model.Tag", "Tag")
+                        .WithMany("Articles")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("Ireview.Core.Model.Article", b =>
-                {
-                    b.HasOne("Ireview.Core.Model.User", "User")
+                    b.HasOne("Ireview.Core.Model.UserProfile", "UserProfile")
                         .WithMany("Articles")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserProfileProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Tag");
+
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Ireview.Infrastructure.Identity.Models.AppUser", b =>
                 {
-                    b.HasOne("Ireview.Core.Model.User", "User")
+                    b.HasOne("Ireview.Core.Model.UserProfile", "UserProfile")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -411,7 +392,12 @@ namespace Ireview.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ireview.Core.Model.User", b =>
+            modelBuilder.Entity("Ireview.Core.Model.Tag", b =>
+                {
+                    b.Navigation("Articles");
+                });
+
+            modelBuilder.Entity("Ireview.Core.Model.UserProfile", b =>
                 {
                     b.Navigation("Articles");
                 });

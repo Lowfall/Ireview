@@ -17,5 +17,11 @@ namespace Ireview.Core.Model
         public string? ImageSource { get; set; }
         public string Text { get; set; }
         public DateTime Date { get; set; }
+        public ICollection<Tag>? Tag { get; set; }
+        public User User { get; set; }
+        public int? Rating { get; set; }
+        public int Stars { get; set; }
+       
+
     }
 }

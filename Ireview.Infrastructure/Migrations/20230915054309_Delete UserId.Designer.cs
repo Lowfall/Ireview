@@ -3,6 +3,7 @@ using System;
 using Ireview.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ireview.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230915054309_Delete UserId")]
+    partial class DeleteUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +34,7 @@ namespace Ireview.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ArticleTag", (string)null);
+                    b.ToTable("ArticleTag");
                 });
 
             modelBuilder.Entity("Ireview.Core.Model.Article", b =>
@@ -54,10 +57,10 @@ namespace Ireview.Infrastructure.Migrations
                     b.Property<string>("ImageSource")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("Rating")
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Stars")
+                    b.Property<int>("Stars")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -75,7 +78,7 @@ namespace Ireview.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Articles", (string)null);
+                    b.ToTable("Articles");
                 });
 
             modelBuilder.Entity("Ireview.Core.Model.Tag", b =>
@@ -94,7 +97,7 @@ namespace Ireview.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Ireview.Core.Model.User", b =>
@@ -123,7 +126,7 @@ namespace Ireview.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersProfiles", (string)null);
+                    b.ToTable("UsersProfiles");
                 });
 
             modelBuilder.Entity("Ireview.Infrastructure.Identity.Models.AppUser", b =>

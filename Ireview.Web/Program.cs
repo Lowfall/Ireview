@@ -6,6 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Ireview.Core.Mapping;
 using AutoMapper;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using System.Configuration;
+using CloudinaryDotNet;
+using Ireview.Web.Configuration;
+using Ireview.Web.Interfaces;
+using System.Drawing;
+using Ireview.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +26,22 @@ builder.Services.AddAutoMapper(configuration =>
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(IMapTo<>))!));
 });
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme; 
+}).AddGoogle(opt =>
+{
+    opt.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    opt.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+}).AddVkontakte(opt =>
+{
+    opt.ClientId = builder.Configuration["Authentication:VK:ClientId"];
+    opt.ClientSecret = builder.Configuration["Authentication:VK:ClientSecret"];
+});
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IImageService, ImageService>();
+
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>();

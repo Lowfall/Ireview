@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Ireview.Infrastructure.Identity.Models;
+using Ireview.Core.Model;
 
 namespace Ireview.Web.Areas.Identity.Pages.Account
 {
@@ -114,12 +115,10 @@ namespace Ireview.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                user.RegisterDate = DateTime.Now;
-                user.Gender = "-";
-                user.FirstName = "-";
-                user.SecondName = "-";
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                var registeredUser = new Core.Model.User() { Id = user.Id, UserName = user.UserName, Email = user.Email, RegisterDate = DateTime.Now, Gender = "-", FirstName = "-", SecondName = "-", Articles = new List<Article>() };
+                user.User = registeredUser;
                 var result = await _userManager.CreateAsync(user, Input.Password);
                
 
