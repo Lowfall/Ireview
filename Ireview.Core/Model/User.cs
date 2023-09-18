@@ -16,6 +16,8 @@ namespace Ireview.Core.Model
         public string? SecondName { get; set; }
         public string? Gender { get; set; }
         public string? Email { get; set; }
+        public string? ImageSource { get; set; }
+        public string? ImagePublicId { get; set; }
         public DateTime? RegisterDate { get; set; }
         public ICollection<Article> Articles { get; set; }
     }

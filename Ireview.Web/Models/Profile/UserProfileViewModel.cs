@@ -18,8 +18,10 @@ namespace Ireview.Web.Models.Profile
         public string? SecondName { get; set; }
         public string? Email { get; set; }
         public string? Gender { get; set; }
+        public string? ImageSource { get; set; }
+        public List<Article> Articles { get; set; } 
         public DateTime? RegisterDate { get; set; }
-        public GenericRepository<Article> Articles { get; set; }
+        public GenericRepository<Article> ArticleRepository { get; set; }
 
         public void Mapping(MapProfile profile)
         {

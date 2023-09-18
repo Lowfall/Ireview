@@ -159,7 +159,7 @@ namespace Ireview.Web.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var loginInfo = await _signInManager.GetExternalLoginInfoAsync();
-                var registeredUser = new Core.Model.User() { Id = user.Id, UserName = user.UserName, Email = user.Email, RegisterDate = DateTime.Now, Gender = "-", FirstName = "-", SecondName = "-", Articles = new List<Article>() };
+                var registeredUser = new Core.Model.User() { Id = user.Id, UserName = user.UserName, Email = user.Email, RegisterDate = DateTime.Now, Gender = "-", FirstName = "-", SecondName = "-",ImageSource ="/resources/avatar.png", Articles = new List<Article>() };
                 user.User = registeredUser;
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)

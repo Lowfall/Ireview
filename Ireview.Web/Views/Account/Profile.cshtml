@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
         <div class="col me-md-3">
             <div class="row justify-content-md-start justify-content-center ">
-                <img src="/resources/Logo_icon.png" style="width:250px;height:250px" class="align-self-center" />
+                <img src="@Model.ImageSource" style="width:250px;height:250px" class="align-self-center" />
                 <div class="col border mt-4 mt-md-0">
                     <h3>@Model.UserName</h3>
                     <p>Name: @Model.FirstName</p>
@@ -19,39 +19,75 @@
                     <p>Gender: @Model.Gender</p>
                     <p>Email: @Model.Email</p>
                     <p>Account created @Model.RegisterDate.Value.Date.ToString("dd/MM/yyyy")</p>
+                    @if (UserManager.GetUserId(User) == Model.Id){
                     <div class="row justify-content-end m-2">
-                        <a class="btn btn-outline-primary m-0" style="border-radius:5px; width:100px">Edit</a>
+                        @Html.ActionLink("Edit","EditPage","Account",Model, new {Style = "border-radius:5px; width:100px", Class ="btn btn-outline-primary m-0"})
                     </div>
+                    }
                 </div>
             </div>
         </div>
         <div class="col-md-2 bg-primary mt-4 mt-md-0" style="border-radius:5px;">
-            <p class="text-light">Amount of posts</p>
+            <p class="text-light">Amount of posts : @Model.Articles.Where(x => x.UserId == Model.Id).Count()</p>
         </div>
     </div>
-    <div class="col border mt-5 m-2" style="border-radius: 15px 15px 0px 0px">
+    <div class="col border mt-5 m-2 pb-3" style="border-radius: 15px 15px 0px 0px">
         <div class="row bg-primary" style=" border-radius: 15px 15px 0px 0px">
-            <div class="row justify-content-between m-1">
+            <div class="d-flex justify-content-between m-1 flex-wrap">
                 <h3 class="text-light w-25 align-self-center p-0">Articles</h3>
-                <a class="btn btn-outline-light btn-smhh" style="border-radius: 10px; width:200px" asp-action="ArticleCreation" asp-controller="Account"><i class="bi bi-plus-circle me-2"></i>New Article</a>
+                <div>
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-light rounded-3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-funnel-fill"></i></button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-filter="games">Games</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-filter="films">Films</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-filter="books">Books</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-filter="music">Music</a>
+                    </div>
+
+                    <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-light rounded-3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-filter"></i></button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date_desk">New -> Old</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date">Old -> New</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate_desk">Popular -> Less popular</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate">Less popular -> Popular</a>
+                        </div>
+                 @if (UserManager.GetUserId(User) == Model.Id){
+                    <a class="btn btn-outline-light" style="border-radius: 10px; width:200px" asp-action="ArticleCreation" asp-controller="Account"><i class="bi bi-plus-circle me-2"></i>New Article</a>
+                
+                 }
+                </div>
             </div>
          
         </div>
-        @foreach(var item in Model.Articles.dbSet.Where(x => x.User.Id == Model.Id)){
+        @foreach(var item in Model.Articles){
                 <div class="p-2 mt-4 " style="border-radius:10px; border:solid 5px black">
-                    <h1> @item.Title</h1>
+                    <div class="d-flex justify-content-between">
+                        <h1 class="col"> @item.Title</h1>
+                        @if (UserManager.GetUserId(User) == Model.Id)
+                        {
+                        <div>
+                            <button id="btnGroupDrop1" type="button" class="btn btn-primary col btn-sm" style="border-radius:10px" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="bi bi-three-dots-vertical"></i></button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
+                                @Html.ActionLink("Edit","EditArticle","Article",item, new {Class ="dropdown-item"})
+                                <a class="dropdown-item" asp-action="DeleteArticle" asp-controller="Article" asp-route-id="@item.Id"> Delete</a>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    
                     <label> @item.Header</label>
                     <img src="@item.ImageSource" class="w-100 border border-2 border-black mt-2" height="200" style="object-fit:cover" />
                     <hr/>
-                    <div style="height:200px;overflow: hidden; position:relative">
+                    <div style="max-height:200px;overflow: hidden; position:relative">
                     <div style="box-shadow:inset 0px -80px 30px -30px #fff;position:absolute;height:200px; width:100%">
                     </div>
                     <p>@item.Text</p>
                         
                     </div>
-
-                    <div class="row justify-content-end me-1 mt-2">
-                        <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:200px">Learn more</a>
+                    <hr/>
+                    <div class="row me-1 mt-2">
+                        <label class="col">@item.Group</label>
+                        <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">Learn more</a>
                     </div>
                 </div>
         }

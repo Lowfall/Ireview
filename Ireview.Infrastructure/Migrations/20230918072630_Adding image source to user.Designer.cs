@@ -3,6 +3,7 @@ using System;
 using Ireview.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ireview.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230918072630_Adding image source to user")]
+    partial class Addingimagesourcetouser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,12 +54,7 @@ namespace Ireview.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ImagePublicId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<string>("ImageSource")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int?>("Rating")
@@ -74,7 +72,6 @@ namespace Ireview.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
@@ -115,9 +112,6 @@ namespace Ireview.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Gender")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ImagePublicId")
                         .HasColumnType("longtext");
 
                     b.Property<string>("ImageSource")
@@ -358,9 +352,7 @@ namespace Ireview.Infrastructure.Migrations
                 {
                     b.HasOne("Ireview.Core.Model.User", "User")
                         .WithMany("Articles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
