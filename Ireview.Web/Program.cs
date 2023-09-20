@@ -26,6 +26,7 @@ builder.Services.AddAutoMapper(configuration =>
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(IMapTo<>))!));
 });
+builder.Services.AddDataProtection();
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -74,7 +75,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCookiePolicy();
 
 app.MapRazorPages();
 
