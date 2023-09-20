@@ -64,8 +64,7 @@ else
     app.UseHsts();
 }
 
-app.UseDeveloperExceptionPage();
-app.UseDatabaseErrorPage();
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -74,6 +73,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCookiePolicy();
 
 app.MapRazorPages();
 
