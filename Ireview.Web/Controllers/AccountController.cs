@@ -100,7 +100,6 @@ namespace Ireview.Web.Controllers
             article.Date = DateTime.Now;
             article.User = currentUser;
             article.Tag = new List<Tag>();
-            article.Stars = 0;
             article.Rating = 0;
             article.User = currentUser;
             if (uploadedFile != null)

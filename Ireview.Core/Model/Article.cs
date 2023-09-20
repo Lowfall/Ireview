@@ -21,9 +21,7 @@ namespace Ireview.Core.Model
         public ICollection<Tag>? Tag { get; set; }
         public string UserId { get; set; }
         public User User { get; set; }
-        public int? Rating { get; set; }
-        public int Stars { get; set; }
-       
-
+        public float? Rating { get; set; }
+        public ICollection<Stars> Stars { get; set; }
     }
 }

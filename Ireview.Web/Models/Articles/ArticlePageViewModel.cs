@@ -18,8 +18,8 @@ namespace Ireview.Web.Models.Articles
         public string Text { get; set; }
         public DateTime Date { get; set; }
         public string UserId { get; set; }
-        public int? Rating { get; set; }
-        public int Stars { get; set; }
+        public float? Rating { get; set; }
+        public int StarsAmount { get; set; }
         public GenericRepository<User> Users { get; set; }
 
         public void Mapping(MapProfile profile)

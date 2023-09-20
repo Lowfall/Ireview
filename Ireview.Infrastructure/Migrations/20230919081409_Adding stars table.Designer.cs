@@ -3,6 +3,7 @@ using System;
 using Ireview.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ireview.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230919081409_Adding stars table")]
+    partial class Addingstarstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,8 +61,8 @@ namespace Ireview.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float?>("Rating")
-                        .HasColumnType("float");
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -395,7 +398,7 @@ namespace Ireview.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Ireview.Core.Model.User", "User")
-                        .WithMany("Stars")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -473,8 +476,6 @@ namespace Ireview.Infrastructure.Migrations
             modelBuilder.Entity("Ireview.Core.Model.User", b =>
                 {
                     b.Navigation("Articles");
-
-                    b.Navigation("Stars");
                 });
 #pragma warning restore 612, 618
         }

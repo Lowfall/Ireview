@@ -20,5 +20,6 @@ namespace Ireview.Core.Model
         public string? ImagePublicId { get; set; }
         public DateTime? RegisterDate { get; set; }
         public ICollection<Article> Articles { get; set; }
+        public ICollection<Stars> Stars { get; set; }
     }
 }
