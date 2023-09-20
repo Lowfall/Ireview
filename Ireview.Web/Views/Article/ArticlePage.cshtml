@@ -63,7 +63,12 @@
     </div>
     <div>
         <p class="text-end">@Model.Date</p>
-            <h1>Rating: @Model.Rating</h1>
+        @if(@Model.Rating == null){
+                <h2>This article has no rating</h2>
+        }else{
+                <h2>Rating: @Model.Rating</h2>
+        }
+           
     </div>
 
     </div>
