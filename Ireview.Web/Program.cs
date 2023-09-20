@@ -26,7 +26,6 @@ builder.Services.AddAutoMapper(configuration =>
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetAssembly(typeof(IMapTo<>))!));
 });
-builder.Services.AddDataProtection();
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -43,10 +42,6 @@ builder.Services.AddAuthentication(opt =>
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IImageService, ImageService>();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.Secure = CookieSecurePolicy.Always;
-});
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>();
@@ -65,7 +60,8 @@ else
     app.UseHsts();
 }
 
-
+app.UseDeveloperExceptionPage();
+app.UseDatabaseErrorPage();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -74,7 +70,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 
 app.MapRazorPages();
 
