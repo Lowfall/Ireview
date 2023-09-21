@@ -83,20 +83,24 @@ namespace Ireview.Web.Controllers
         public IActionResult EditArticle(Article article, IFormFile uploadedFile)
         {
             var currentUser = GetCurrentUser();
-            article.User = currentUser;
-            article.Date = DateTime.Now;
-            if(uploadedFile != null)
+            if (article.Header != null && article.Title != null && article.Text != null)
             {
-                var result = imageService.AddPhotoResult(uploadedFile);
-                article.ImageSource = result.Result.SecureUrl.AbsoluteUri;
-                article.ImagePublicId = result.Result.PublicId;
+                article.User = currentUser;
+                article.Date = DateTime.Now;
+                if (uploadedFile != null)
+                {
+                    var result = imageService.AddPhotoResult(uploadedFile);
+                    article.ImageSource = result.Result.SecureUrl.AbsoluteUri;
+                    article.ImagePublicId = result.Result.PublicId;
+                }
+                if (article.ImagePublicId == null)
+                {
+                    article.ImagePublicId = "";
+                }
+                articleRepository.Update(article);
+                return RedirectToAction("Profile", "Account", new { id = currentUser.Id });
             }
-            if (article.ImagePublicId == null)
-            {
-                article.ImagePublicId = "";
-            }
-            articleRepository.Update(article);
-            return RedirectToAction("Profile","Account", new { id = currentUser.Id });
+            return View("ArticleEditing", article);
         }
 
         public IActionResult DeleteArticle(int id)

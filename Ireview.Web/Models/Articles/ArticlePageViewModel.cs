@@ -10,16 +10,16 @@ namespace Ireview.Web.Models.Articles
     public class ArticlePageViewModel : IMapTo<Article>
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Header { get; set; }
-        public string Group { get; set; }
+        public string? Title { get; set; }
+        public string? Header { get; set; }
+        public string? Group { get; set; }
         public string? ImageSource { get; set; }
         public string? ImagePublicId { get; set; }
-        public string Text { get; set; }
+        public string? Text { get; set; }
         public DateTime Date { get; set; }
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         public float? Rating { get; set; }
-        public int StarsAmount { get; set; }
+        public int? StarsAmount { get; set; }
         public GenericRepository<User> Users { get; set; }
 
         public void Mapping(MapProfile profile)

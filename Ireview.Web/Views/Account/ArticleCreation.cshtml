@@ -11,6 +11,7 @@
 <h1 class="mt-4">@Localizer["NewArticle"]</h1>
 
 <form class="border border-black p-3 border-2" method="post" action="PostArticle" enctype="multipart/form-data">
+    <div asp-validation-summary="All"></div>
     <div>
         <label class="col-form-label " for="inputDefault">@Localizer["Image"]</label>
         <div class="fallback">
@@ -20,6 +21,7 @@
     <div class="form-group">
         <label class="col-form-label " for="inputDefault">@Localizer["Title"]</label>
         <input type="text" class="form-control" id="articleTitle" asp-for="Title">
+        <span asp-validation-for="Title"></span>
     </div>
     <div class="form-group">
         <label class="col-form-label mt-2" for="inputDefault">@Localizer["Header"]</label>

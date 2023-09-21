@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -11,11 +12,14 @@ namespace Ireview.Core.Model
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Title { get; set; }
+        [Required]
         public string Header { get; set; }
         public string Group { get; set; }
         public string ImageSource { get; set; }
         public string? ImagePublicId { get; set; }
+        [Required]
         public string Text { get; set; }
         public DateTime Date { get; set; }
         public ICollection<Tag>? Tag { get; set; }

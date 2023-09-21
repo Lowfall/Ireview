@@ -14,8 +14,8 @@
     <input asp-for="Id" hidden/>
     <input asp-for="ImageSource" hidden/>
     <input asp-for="ImagePublicId" hidden/>
-
-    <div>
+  
+    <div >
         <label class="col-form-label " for="inputDefault">@Localizer["Image"]</label>
         <div class="fallback">
             <input id="fileUpload" type="file" class=" dropzone w-100" style="min-height:50px" name="uploadedFile" onchange="setFileInfo(this.files)" />

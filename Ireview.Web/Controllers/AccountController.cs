@@ -97,6 +97,9 @@ namespace Ireview.Web.Controllers
         {
 
             var currentUser = GetCurrentUser();
+            if(ModelState.IsValid)
+            {
+                
             article.Date = DateTime.Now;
             article.User = currentUser;
             article.Tag = new List<Tag>();
@@ -115,6 +118,9 @@ namespace Ireview.Web.Controllers
             }
             articleRepository.Create(article);
             return RedirectToAction("Profile",new { id = currentUser.Id });
+            }
+
+            return RedirectToAction("ArticleCreation");
         }
 
         [HttpPost]
@@ -122,6 +128,10 @@ namespace Ireview.Web.Controllers
         {
 
             var currentUser = GetCurrentUser();
+            if (userProfile.UserName == null)
+            {
+                return View("EditPage", userProfile);
+            }
             currentUser.UserName = userProfile.UserName;
             currentUser.FirstName = userProfile.FirstName;
             currentUser.SecondName = userProfile.SecondName;
