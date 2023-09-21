@@ -1,11 +1,17 @@
 ﻿@using Ireview.Core.Model
 @using Ireview.Infrastructure.Contexts.Repositories
+@using Markdig
 @using Microsoft.AspNetCore.Identity
 @using Ireview.Web.Models.Profile
 @using Ireview.Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject UserManager<AppUser> UserManager
 @model UserProfileViewModel
 
+@{
+    var edit = Localizer["Edit"];
+}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <div class="row justify-content-center">
     <div class="row justify-content-center">
@@ -14,27 +20,27 @@
                 <img src="@Model.ImageSource" style="width:250px;height:250px" class="align-self-center" />
                 <div class="col border mt-4 mt-md-0">
                     <h3>@Model.UserName</h3>
-                    <p>Name: @Model.FirstName</p>
-                    <p>Surname: @Model.SecondName</p>
-                    <p>Gender: @Model.Gender</p>
-                    <p>Email: @Model.Email</p>
-                    <p>Account created @Model.RegisterDate.Value.Date.ToString("dd/MM/yyyy")</p>
+                    <p>@Localizer["Name"]: @Model.FirstName</p>
+                    <p>@Localizer["Surname"]: @Model.SecondName</p>
+                    <p>@Localizer["Gender"]: @Model.Gender</p>
+                    <p>@Localizer["Email"]: @Model.Email</p>
+                    <p>@Localizer["CreationDate"] @Model.RegisterDate.Value.Date.ToString("dd/MM/yyyy")</p>
                     @if (UserManager.GetUserId(User) == Model.Id){
                     <div class="row justify-content-end m-2">
-                        @Html.ActionLink("Edit","EditPage","Account",Model, new {Style = "border-radius:5px; width:100px", Class ="btn btn-outline-primary m-0"})
+                            @Html.ActionLink(edit.Value,"EditPage","Account",Model, new {Style = "border-radius:5px;", Class ="btn btn-outline-primary m-0"})
                     </div>
                     }
                 </div>
             </div>
         </div>
         <div class="col-md-2 bg-primary mt-4 mt-md-0" style="border-radius:5px;">
-            <p class="text-light">Amount of posts : @Model.Articles.Where(x => x.UserId == Model.Id).Count()</p>
+            <p class="text-light">@Localizer["ArticlesAmount"] : @Model.Articles.Where(x => x.UserId == Model.Id).Count()</p>
         </div>
     </div>
     <div class="col border mt-5 m-2 pb-3" style="border-radius: 15px 15px 0px 0px">
         <div class="row bg-primary" style=" border-radius: 15px 15px 0px 0px">
             <div class="d-flex justify-content-between m-1 flex-wrap">
-                <h3 class="text-light w-25 align-self-center p-0">Articles</h3>
+                <h3 class="text-light w-25 align-self-center p-0">@Localizer["Articles"]</h3>
                 <div>
                     <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-light rounded-3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-funnel-fill"></i></button>
                     <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
@@ -46,13 +52,13 @@
 
                     <button id="btnGroupDrop1" type="button" class="btn btn-primary btn-light rounded-3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-filter"></i></button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date_desk">New -> Old</a>
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date">Old -> New</a>
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate_desk">Popular -> Less popular</a>
-                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate">Less popular -> Popular</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date_desk">@Localizer["NewFirst"]</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="date">@Localizer["OldFirst"]</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate_desk">@Localizer["PopularFirst"]</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile" asp-route-id="@Model.Id" asp-route-sortOrder="rate">@Localizer["NotPopularFirst"]</a>
                         </div>
                  @if (UserManager.GetUserId(User) == Model.Id){
-                    <a class="btn btn-outline-light" style="border-radius: 10px; width:200px" asp-action="ArticleCreation" asp-controller="Account"><i class="bi bi-plus-circle me-2"></i>New Article</a>
+                        <a class="btn btn-outline-light" style="border-radius: 10px; width:200px" asp-action="ArticleCreation" asp-controller="Account"><i class="bi bi-plus-circle me-2"></i>@Localizer["NewArticle"]</a>
                 
                  }
                 </div>
@@ -68,7 +74,7 @@
                         <div>
                             <button id="btnGroupDrop1" type="button" class="btn btn-primary col btn-sm" style="border-radius:10px" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="bi bi-three-dots-vertical"></i></button>
                             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" style="">
-                                @Html.ActionLink("Edit","EditArticle","Article",item, new {Class ="dropdown-item"})
+                                @Html.ActionLink(edit.Value,"EditArticle","Article",item, new {Class ="dropdown-item"})
                                 <a class="dropdown-item" asp-action="DeleteArticle" asp-controller="Article" asp-route-id="@item.Id"> Delete</a>
                             </div>
                         </div>
@@ -81,13 +87,18 @@
                     <div style="max-height:200px;overflow: hidden; position:relative">
                     <div style="box-shadow:inset 0px -80px 30px -30px #fff;position:absolute;height:200px; width:100%">
                     </div>
-                    <p>@item.Text</p>
+                    @{
+                        var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                        item.Text = Markdown.ToHtml(item.Text, pipeline);
+
+                    }
+                    <p>@Html.Raw(item.Text)</p>
                         
                     </div>
                     <hr/>
                     <div class="row me-1 mt-2">
                         <label class="col">@item.Group</label>
-                        <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">Learn more</a>
+                        <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">@Localizer["LearnMore"]</a>
                     </div>
                 </div>
         }

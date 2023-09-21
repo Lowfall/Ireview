@@ -1,4 +1,6 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -9,29 +11,29 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h1 class="text-center" >@ViewData["Title"]</h1>
+            <h1 class="text-center" >@Localizer["RegisterHeader"]</h1>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-floating ">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
+                <label>@Localizer["Email"]</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             <div class="form-floating mt-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
+                <label> @Localizer["Password"]</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             <div class="form-floating mt-3">
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
+                <label>@Localizer["ConfirmPassword"]</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div>
-                <button id="registerSubmit" type="submit" class="w-100 btn  btn-primary mt-4">Register</button>
+                <button id="registerSubmit" type="submit" class="w-100 btn  btn-primary mt-4">@Localizer["Register"]</button>
             </div>
             <div class="mt-3">
-                <a asp-area="Identity" asp-page="/Account/Login">You have account? Log in</a>
+                <a asp-area="Identity" asp-page="/Account/Login">@Localizer["LogIn"]</a>
             </div>
         </form>
     </div>

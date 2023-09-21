@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Ireview.Infrastructure.Identity.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
@@ -9,9 +11,9 @@
    <li class="nav-item dropdown">
        <a id="manage" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true" role="button" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)!</a>
         <div class="dropdown-menu" >
-                <a class="nav-link dropdown-item ps-2 pt-2 pb-2" asp-action="Profile" asp-controller="Account" asp-route-id="@UserManager.GetUserAsync(User).Result.Id">Profile</a>
+                <a class="nav-link dropdown-item ps-2 pt-2 pb-2" asp-action="Profile" asp-controller="Account" asp-route-id="@UserManager.GetUserAsync(User).Result.Id">@Localizer["Profile"]</a>
                 <form id="logoutForm" class="form-inline p-0 m-0 " asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button id="logout" type="submit" class="nav-link dropdown-item m-0 ps-2 pt-2 pb-2">Logout</button>
+                    <button id="logout" type="submit" class="nav-link dropdown-item m-0 ps-2 pt-2 pb-2">@Localizer["LogOut"]</button>
                 </form>
         </div>
        
@@ -19,6 +21,6 @@
 }
 else
 {
-        <a class="btn btn-outline-light" id="login" asp-area="Identity" asp-page="/Account/Login">Log in / Sign up</a>
+        <a class="btn btn-outline-light" id="login" asp-area="Identity" asp-page="/Account/Login">@Localizer["Auth"]</a>
 }
 </ul>

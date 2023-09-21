@@ -1,7 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Identity
 @using Ireview.Infrastructure.Identity.Models
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
@@ -29,21 +30,27 @@
                 <div class="navbar-collapse collapse" id="navbarColor01" style="">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Profile" asp-controller="Account">
-                                Home
+                            <a class="nav-link" asp-action="Index" asp-controller="Home">
+                               @Localizer["Home"]
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-action="Index" asp-controller="Home">
-                                Reviews
+                                @Localizer["Articles"]
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-action="Index" asp-controller="Home">
-                                News
+                        <li class="nav-item align-self-center dropdown">
+                            <a class=" nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @Thread.CurrentThread.CurrentUICulture.Name
                             </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a asp-action="SetRULanguage" asp-controller="Home">ru</a></li>
+                                <li><a asp-action="SetENLanguage" asp-controller="Home">en</a></li>
+                            </ul>
+                            
                         </li>
                     </ul>
+
                     <partial name="_LoginPartial"/>
                 </div>
             </div>

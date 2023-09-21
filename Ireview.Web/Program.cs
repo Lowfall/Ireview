@@ -15,6 +15,8 @@ using Ireview.Web.Interfaces;
 using System.Drawing;
 using Ireview.Web.Services;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString,new MySqlServerVersion(new Version(8,0,33))));
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "Resources");
+builder.Services.AddRazorPages().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+builder.Services.AddControllersWithViews().AddViewLocalization();
 builder.Services.AddAutoMapper(configuration =>
 {
     configuration.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
@@ -49,6 +54,11 @@ builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireCo
 builder.Services.AddRazorPages();
 var app = builder.Build();
 
+var cultures = new List<CultureInfo> {
+    new CultureInfo("en"),
+    new CultureInfo("ru")
+};
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -60,6 +70,13 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseRequestLocalization(options =>
+{
+    options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("ru");
+    options.SupportedCultures = cultures;
+    options.SupportedUICultures = cultures;
+});
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {

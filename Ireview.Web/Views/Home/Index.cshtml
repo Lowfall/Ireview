@@ -1,10 +1,13 @@
 ﻿@using Ireview.Infrastructure.Identity.Models
+@using Markdig
 @using Microsoft.AspNetCore.Identity
 @using Ireview.Web.Models.Home
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @inject UserManager<AppUser> UserManager
 @model MainViewModel
 
-<h1 class="text-center">Newest articles</h1>
+<h1 class="text-center">@Localizer["NewArticles"]</h1>
 <hr/>
 <div class="d-flex justify-content-between flex-wrap">
     @if(Model.Articles.dbSet.Count() > 0){
@@ -17,7 +20,7 @@
                 <p class="text-center text-break">@item.Header</p>
                 <img src="@item.ImageSource" height="200" width="100%" class="rounded-3"/>
                 <div class="row justify-content-center mt-3">
-                    <a class="col-6 btn btn-sm btn-primary rounded-3 text-center" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">Learn more</a>
+                    <a class="col-6 btn btn-sm btn-primary rounded-3 text-center" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">@Localizer["LearnMore"]</a>
                 </div>
             </div>      
     
@@ -25,7 +28,7 @@
     }
 </div>
 <hr />
-<h1 class="text-center mt-5">Top popular articles</h1>
+<h1 class="text-center mt-5">@Localizer["PopularArticles"]</h1>
 @foreach (var item in Model.Articles.dbSet.OrderByDescending(x => x.Rating).Take(5))
 {
     <div class="p-2 mt-4 " style="border-radius:10px; border:solid 5px black">
@@ -39,13 +42,18 @@
         <div style="max-height:200px;overflow: hidden; position:relative">
             <div style="box-shadow:inset 0px -80px 30px -30px #fff;position:absolute;height:200px; width:100%">
             </div>
-            <p>@item.Text</p>
+            @{
+                var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                item.Text = Markdown.ToHtml(item.Text, pipeline);
+
+            }
+            @Html.Raw(item.Text)
 
         </div>
         <hr />
         <div class="row me-1 mt-2">
             <label class="col">@item.Group</label>
-            <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">Learn more</a>
+            <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">@Localizer["LearnMore"]</a>
         </div>
     </div>
 }

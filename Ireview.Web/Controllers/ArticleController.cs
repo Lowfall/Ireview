@@ -43,7 +43,10 @@ namespace Ireview.Web.Controllers
             if (user != null)
             {
                 GetArticleStars(user.Id, currentArticle.Id, out var articleStars);
-                currentArticle.StarsAmount = articleStars.Amount;
+                if(articleStars != null)
+                {
+                    currentArticle.StarsAmount = articleStars.Amount;
+                }
             }
             return View(currentArticle);
         }
