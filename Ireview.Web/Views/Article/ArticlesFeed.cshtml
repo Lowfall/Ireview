@@ -1,0 +1,51 @@
+﻿@using Ireview.Infrastructure.Identity.Models
+@using Ireview.Web.Models.Articles
+@using Markdig
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@inject UserManager<AppUser> UserManager
+@model ArticleFeedViewModel
+
+@{
+    var edit = Localizer["Edit"];
+}
+
+ <script src="/lib/jquery/dist/jquery.js"></script>
+@foreach (var item in Model.Articles)
+{
+    <div class="p-2 mt-4 " style="border-radius:10px; border:solid 5px black">
+        <div class="d-flex justify-content-between">
+            <h1 class="col"> @item.Title</h1>
+        </div>
+
+        <label> @item.Header</label>
+        <img src="@item.ImageSource" class="w-100 border border-2 border-black mt-2" height="200" style="object-fit:cover" />
+        <hr />
+        <div style="max-height:200px;overflow: hidden; position:relative">
+            <div style="box-shadow:inset 0px -80px 30px -30px #fff;position:absolute;height:200px; width:100%">
+            </div>
+            @{
+                var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+                item.Text = Markdown.ToHtml(item.Text, pipeline);
+
+            }
+            <p>@Html.Raw(item.Text)</p>
+
+        </div>
+        <hr />
+        <div class="row me-1 mt-2">
+            <label class="col">@item.Group</label>
+            <a class="btn btn-outline-primary btn-sm" style="border-radius: 10px; width:150px" asp-controller="Article" asp-action="ArticlePage" asp-route-id="@item.Id">@Localizer["LearnMore"]</a>
+        </div>
+    </div>
+}
+
+<script>
+    $(window).scroll(function () {
+        if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+            $.post("@Url.Action("ArticleFeed","Article")");
+            document.location.reload(true);
+        }
+    });
+</script>

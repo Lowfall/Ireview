@@ -18,5 +18,6 @@ namespace Ireview.Infrastructure.Contexts
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Stars> Stars { get; set; }
         public DbSet<User> UsersProfiles { get; set; }
+
     }
 }

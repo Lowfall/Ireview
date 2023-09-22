@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using CloudinaryDotNet;
 
 namespace Ireview.Web.Controllers
 {
@@ -101,6 +102,16 @@ namespace Ireview.Web.Controllers
                 return RedirectToAction("Profile", "Account", new { id = currentUser.Id });
             }
             return View("ArticleEditing", article);
+        }
+
+        public IActionResult ArticleFeed()
+        {
+            var articleList = articleRepository.dbSet.Take(ArticleFeedViewModel.AmountArticles).ToList();
+            if (ArticleFeedViewModel.AmountArticles < articleRepository.dbSet.Count())
+            {
+                ArticleFeedViewModel.AmountArticles += 5;
+            }
+            return View("ArticlesFeed", new ArticleFeedViewModel() { Articles = articleList });
         }
 
         public IActionResult DeleteArticle(int id)
